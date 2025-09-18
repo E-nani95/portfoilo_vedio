@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 비디오 플레이어</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue.js 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        /* 간단한 커스텀 스타일 */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+    <!-- Vue App Container -->
+    <div id="app" class="w-full max-w-4xl p-4 md:p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+                비디오 플레이어
+            </h1>
+            <p class="text-gray-400 text-lg">
+                Vue.js와 Tailwind CSS로 만들었습니다.
+            </p>
+        </div>
+
+        <!-- Video Player Component -->
+        <div class="bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
+            <video 
+                class="w-full h-full object-cover"
+                controls 
+                autoplay 
+                muted
+                loop
+                playsinline
+                :src="videoSource"
+                @error="handleVideoError"
+            >
+                <!-- Fallback Message -->
+                브라우저가 비디오 태그를 지원하지 않습니다.
+            </video>
+        </div>
+
+        <div v-if="videoError" class="mt-4 text-center bg-red-900/50 text-red-300 p-4 rounded-lg">
+            <p>비디오를 불러오는 데 실패했습니다.</p>
+            <p class="text-sm">비디오 파일 경로가 올바른지 확인해주세요.</p>
+        </div>
+
+        <!-- Instructions -->
+        <div class="mt-8 text-center text-gray-500 text-sm">
+            <p>
+                <strong>참고:</strong> 이 플레이어는 예시 동영상을 재생합니다. 자신의 동영상을 재생하려면<br>
+                `index.html` 파일 내 `videoSource` 값을 원하는 비디오 파일 경로로 수정하세요.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    // --- 중요 ---
+                    // 여기에 재생할 비디오 파일 경로를 입력하세요.
+                    // Vercel 배포 시, 프로젝트의 public 폴더에 비디오를 넣고 '/video.mp4' 와 같이 절대 경로로 지정하는 것이 좋습니다.
+                    // 임시 재생을 위해 Placeholder 비디오를 사용합니다.
+                    videoSource: 'https://videos.pexels.com/video-files/3209828/3209828-hd_1280_720_25fps.mp4',
+                    videoError: false
+                }
+            },
+            methods: {
+                handleVideoError() {
+                    console.error("비디오 로딩 오류: 경로를 확인하세요.");
+                    this.videoError = true;
+                }
+            }
+        }).mount('#app');
+    </script>
+
+</body>
+</html>
